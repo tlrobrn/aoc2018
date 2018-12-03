@@ -22,26 +22,28 @@ defmodule Day3.Part1 do
     |> Stream.map(&String.trim/1)
     |> Enum.map(&Claim.from_string/1)
     |> fabric_claims
+    |> reverse_claims
     |> Stream.map(fn {_coordinates, ids} -> length(ids) end)
     |> Enum.count(&(&1 >= 2))
     |> IO.inspect
   end
 
   defp fabric_claims(claims) do
-    0..999
-    |> Stream.flat_map(&Enum.map(0..999, fn y -> {&1, y} end))
-    |> Stream.map(&apply_claims(&1, claims))
+    claims
+    |> Stream.map(fn %Claim{id: id, left: left, top: top, width: width, height: height} ->
+      coordinates = left..(left+width-1)
+                    |> Enum.flat_map(fn x ->
+                      Enum.map(top..(top+height-1), fn y -> {x, y} end)
+                    end)
+      {id, coordinates}
+    end)
   end
 
-  defp apply_claims({x, y}, claims) do
-    assigned_ids = claims
-                   |> Stream.map(fn
-                     %Claim{id: id, left: left, top: top, width: width, height: height} when x >= left and y >= top and x < left + width and y < top + height -> id
-                     _ -> nil
-                   end)
-                   |> Enum.reject(&is_nil/1)
-
-    {{x, y}, assigned_ids}
+  defp reverse_claims(ids_to_coordinates) do
+    ids_to_coordinates
+    |> Enum.reduce(%{}, fn {id, coordinates}, coordinates_to_ids ->
+      Enum.reduce(coordinates, coordinates_to_ids, fn coord, map -> Map.update(map, coord, [id], &([id | &1])) end)
+    end)
   end
 end
 

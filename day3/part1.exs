@@ -20,7 +20,7 @@ defmodule Day3.Part1 do
     @input
     |> File.stream!
     |> Stream.map(&String.trim/1)
-    |> Enum.map(&Claim.from_string/1)
+    |> Stream.map(&Claim.from_string/1)
     |> fabric_claims
     |> reverse_claims
     |> Stream.map(fn {_coordinates, ids} -> length(ids) end)
@@ -42,7 +42,7 @@ defmodule Day3.Part1 do
   defp reverse_claims(ids_to_coordinates) do
     ids_to_coordinates
     |> Enum.reduce(%{}, fn {id, coordinates}, coordinates_to_ids ->
-      Enum.reduce(coordinates, coordinates_to_ids, fn coord, map -> Map.update(map, coord, [id], &([id | &1])) end)
+      Enum.reduce(coordinates, coordinates_to_ids, fn coord, map -> Map.update(map, coord, [id], &[id | &1]) end)
     end)
   end
 end

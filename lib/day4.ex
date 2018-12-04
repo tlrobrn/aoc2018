@@ -5,13 +5,12 @@ defmodule AdventOfCode.Day4 do
     @pattern ~r/\[(?<timestamp>[^\]]+)\] (?<text>.+)/
 
     def from_string(s) do
-      %{"timestamp" => timestamp, "text" => text} =
-        Regex.named_captures(@pattern, s)
+      %{"timestamp" => timestamp, "text" => text} = Regex.named_captures(@pattern, s)
 
       %__MODULE__{
         id: id_from_text(text),
         timestamp: NaiveDateTime.from_iso8601!("#{timestamp}:00"),
-        action: action_from_text(text),
+        action: action_from_text(text)
       }
     end
 
@@ -31,7 +30,7 @@ defmodule AdventOfCode.Day4 do
   def parse(lines) do
     lines
     |> Stream.map(&Entry.from_string/1)
-    |> Enum.sort(&NaiveDateTime.compare(&1.timestamp, &2.timestamp) != :gt)
+    |> Enum.sort(&(NaiveDateTime.compare(&1.timestamp, &2.timestamp) != :gt))
   end
 
   use AdventOfCode.Day

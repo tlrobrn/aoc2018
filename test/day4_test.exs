@@ -21,4 +21,8 @@ defmodule AdventOfCode.Day4.Test do
   test "part1" do
     assert 38813 == Day4.part1()
   end
+
+  test "part2" do
+    assert 141_071 == Day4.part2()
+  end
 end

@@ -1,0 +1,34 @@
+defmodule AdventOfCode.Day6.Part2 do
+  def run(input, cutoff \\ 10_000) do
+    points = input |> Enum.to_list
+
+    points
+    |> get_total_distances(points, cutoff)
+    |> Enum.count(fn {_, d} -> d < cutoff end)
+  end
+
+  defp get_total_distances(points_remaining, points, cutoff, result \\ %{})
+  defp get_total_distances([], _, _, result), do: result
+  defp get_total_distances([{x, y} = p | tail], points, cutoff, result) do
+    if p in result do
+      get_total_distances(tail, points, cutoff, result)
+    else
+      td = total_distance(p, points)
+      if td < cutoff do
+        result = Map.put(result, p, td)
+        get_total_distances([{x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1} | tail], points, cutoff, result)
+      else
+        get_total_distances(tail, points, cutoff, result)
+      end
+    end
+  end
+
+  defp total_distance(_p, [], d), do: d
+  defp total_distance(_p, [q | tail], d) do
+    total_distance(p, tail, d + manhatten_distance(p, q))
+  end
+
+  defp manhatten_distance({x1, y1}, {x2, y2}) do
+    abs(x1 - x2) + abs(y1 - y2)
+  end
+end

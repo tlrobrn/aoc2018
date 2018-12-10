@@ -1,23 +1,13 @@
 defmodule AdventOfCode.Day7.Part1 do
-  def run(input) do
-    input
-    |> Enum.to_list
-    |> Enum.reduce(%{}, &build_graph/2)
-    |> resolve
-  end
+  alias AdventOfCode.Day7
 
-  defp build_graph({parent, child}, graph) do
-    graph
-    |> Map.update(parent, %{parents: [], children: [child]}, fn %{parents: ps, children: cs} -> %{parents: ps, children: [child | cs]} end)
-    |> Map.update(child, %{parents: [parent], children: []}, fn %{parents: ps, children: cs} -> %{parents: [parent | ps], children: cs} end)
+  def run(input) do
+    input |> resolve
   end
 
   defp resolve(graph) do
       graph
-      |> Enum.reduce(MapSet.new(), fn
-        {node, %{parents: []}}, candidates -> MapSet.put(candidates, node)
-        _, candidates -> candidates
-      end)
+      |> Day7.starting_queue
       |> Enum.sort
       |> resolve(graph, "")
   end

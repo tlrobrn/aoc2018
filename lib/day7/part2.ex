@@ -18,22 +18,15 @@ defmodule AdventOfCode.Day7.Part2 do
     )
   end
 
-  defp build([], graph, workers, at, completed, time) do
-    if Enum.all?(workers, fn {_, {_, remaining}} -> remaining == 0 end) do
+  defp build(tasks, graph, workers, at, completed, time) do
+    if Enum.empty?(tasks) && Enum.all?(workers, fn {_, {_, remaining}} -> remaining == 0 end) do
       time
     else
       %{tasks: new_tasks, workers: new_workers, completed: new_completed} =
-        resolve([], workers, graph, completed, at)
+        resolve(tasks, workers, graph, completed, at)
 
       build(new_tasks, graph, new_workers, at, new_completed, time + 1)
     end
-  end
-
-  defp build(tasks, graph, workers, at, completed, time) do
-    %{tasks: new_tasks, workers: new_workers, completed: new_completed} =
-      resolve(tasks, workers, graph, completed, at)
-
-    build(new_tasks, graph, new_workers, at, new_completed, time + 1)
   end
 
   defp resolve(tasks, workers, graph, completed, at) do

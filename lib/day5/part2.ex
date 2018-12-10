@@ -8,7 +8,7 @@ defmodule AdventOfCode.Day5.Part2 do
     |> Enum.reduce(nil, fn units, minimum ->
       input
       |> Enum.reject(&MapSet.member?(units, &1))
-      |> Part1.run
+      |> Part1.run()
       |> min(minimum)
     end)
   end

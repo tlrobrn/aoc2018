@@ -3,6 +3,6 @@ defmodule AdventOfCode.Day5.Part2.Test do
   alias AdventOfCode.Day5.Part2
 
   test "example" do
-    assert 4 == String.graphemes("dabAcCaCBAcCcaDA") |> Part2.run
+    assert 4 == String.graphemes("dabAcCaCBAcCcaDA") |> Part2.run()
   end
 end

@@ -7,8 +7,8 @@ defmodule AdventOfCode.Day7.Part2 do
 
   defp resolve(graph, workers, additional_seconds) do
     graph
-    |> Day7.starting_queue
-    |> Enum.sort
+    |> Day7.starting_queue()
+    |> Enum.sort()
     |> build(
       graph,
       Enum.reduce(1..workers, %{}, &Map.put(&2, &1, {nil, 0})),
@@ -24,12 +24,15 @@ defmodule AdventOfCode.Day7.Part2 do
     else
       %{tasks: new_tasks, workers: new_workers, completed: new_completed} =
         resolve([], workers, graph, completed, at)
+
       build(new_tasks, graph, new_workers, at, new_completed, time + 1)
     end
   end
+
   defp build(tasks, graph, workers, at, completed, time) do
     %{tasks: new_tasks, workers: new_workers, completed: new_completed} =
       resolve(tasks, workers, graph, completed, at)
+
     build(new_tasks, graph, new_workers, at, new_completed, time + 1)
   end
 
@@ -42,15 +45,23 @@ defmodule AdventOfCode.Day7.Part2 do
       |> Map.merge(Map.new(assignments))
       |> Enum.reduce(%{tasks: remaining_tasks, workers: %{}, completed: completed}, fn
         {worker, {task, 1}}, %{tasks: ts, workers: ws, completed: cs} ->
-          %{tasks: graph[task].children ++ ts, workers: Map.put(ws, worker, {nil, 0}), completed: MapSet.put(cs, task)}
-        {worker, {nil, 0}}, %{workers: ws} = m -> %{m | workers: Map.put(ws, worker, {nil, 0})}
-        {worker, {task, remaining}}, %{workers: ws} = m -> %{m | workers: Map.put(ws, worker, {task, remaining - 1})}
+          %{
+            tasks: graph[task].children ++ ts,
+            workers: Map.put(ws, worker, {nil, 0}),
+            completed: MapSet.put(cs, task)
+          }
+
+        {worker, {nil, 0}}, %{workers: ws} = m ->
+          %{m | workers: Map.put(ws, worker, {nil, 0})}
+
+        {worker, {task, remaining}}, %{workers: ws} = m ->
+          %{m | workers: Map.put(ws, worker, {task, remaining - 1})}
       end)
 
     new_tasks =
       unsorted_queue
-      |> MapSet.new
-      |> Enum.sort
+      |> MapSet.new()
+      |> Enum.sort()
 
     %{tasks: new_tasks, workers: new_workers, completed: new_completed}
   end
@@ -60,13 +71,13 @@ defmodule AdventOfCode.Day7.Part2 do
       workers
       |> Stream.filter(fn {_, {_, remaining_time}} -> remaining_time == 0 end)
       |> Stream.map(fn {worker, _} -> worker end)
-      |> Enum.sort
+      |> Enum.sort()
 
     assignments =
       tasks
       |> Stream.filter(fn task ->
         Enum.all?(graph[task].parents, &MapSet.member?(completed, &1))
-      end) 
+      end)
       |> Stream.zip(available_workers)
       |> Enum.map(fn {task, worker} -> {worker, {task, time_for(task) + at}} end)
 
@@ -103,7 +114,7 @@ defmodule AdventOfCode.Day7.Part2 do
     "W" => 23,
     "X" => 24,
     "Y" => 25,
-    "Z" => 26,
+    "Z" => 26
   }
   defp time_for(x) do
     @letter_to_time[x] || 0

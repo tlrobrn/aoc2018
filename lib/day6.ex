@@ -6,6 +6,7 @@ defmodule AdventOfCode.Day6 do
   end
 
   def total_distance(_p, [], d), do: d
+
   def total_distance(p, [q | tail], d) do
     total_distance(p, tail, d + manhatten_distance(p, q))
   end

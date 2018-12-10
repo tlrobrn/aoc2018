@@ -15,8 +15,12 @@ defmodule AdventOfCode.Day7 do
 
   defp build_graph({parent, child}, graph) do
     graph
-    |> Map.update(parent, %{parents: [], children: [child]}, fn %{parents: ps, children: cs} -> %{parents: ps, children: [child | cs]} end)
-    |> Map.update(child, %{parents: [parent], children: []}, fn %{parents: ps, children: cs} -> %{parents: [parent | ps], children: cs} end)
+    |> Map.update(parent, %{parents: [], children: [child]}, fn %{parents: ps, children: cs} ->
+      %{parents: ps, children: [child | cs]}
+    end)
+    |> Map.update(child, %{parents: [parent], children: []}, fn %{parents: ps, children: cs} ->
+      %{parents: [parent | ps], children: cs}
+    end)
   end
 
   use AdventOfCode.Day

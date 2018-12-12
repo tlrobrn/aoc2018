@@ -13,9 +13,9 @@ defmodule AdventOfCode.Day do
         |> __MODULE__.Part2.run()
       end
 
-      @day String.last(Atom.to_string(__MODULE__))
       defp input do
-        @day |> AdventOfCode.input_lines()
+        [_, day] = String.split(Atom.to_string(__MODULE__), "Day")
+        day |> AdventOfCode.input_lines()
       end
 
       if !Module.defines?(__MODULE__, {:parse, 1}) do

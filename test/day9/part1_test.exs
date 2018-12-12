@@ -11,7 +11,7 @@ defmodule AdventOfCode.Day9.Part1.Test do
   end
 
   test "example 3" do
-    assert 146373 == Part1.run({13, 7999})
+    assert 146_373 == Part1.run({13, 7999})
   end
 
   test "example 4" do

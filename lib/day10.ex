@@ -4,7 +4,9 @@ defmodule AdventOfCode.Day10 do
     lines
     |> Enum.map(fn line ->
       Regex.named_captures(@pattern, line)
-      |> Map.new(fn {key, value} -> {String.to_atom(key), String.to_integer(String.trim(value))} end)
+      |> Map.new(fn {key, value} ->
+        {String.to_atom(key), String.to_integer(String.trim(value))}
+      end)
     end)
   end
 
